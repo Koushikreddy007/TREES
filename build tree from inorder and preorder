@@ -1,0 +1,55 @@
+# TREES
+
+#include <iostream>
+using namespace std;
+struct node{
+    int data;
+    struct node* left;
+    struct node* right;
+    node(int x){
+        data=x;
+        left=NULL;
+        right=NULL;
+    }
+};
+int search(int in[],int st,int end,int curr){
+    for(int i=st;i<=end;i++){
+        if(in[i]==curr){
+            return i;
+        }
+    }
+    return -1;
+}
+node* buildtree(int pre[],int in[],int st,int end){
+    static int idx=0;
+     if(st>end){
+        return NULL;
+    }
+    int curr=pre[idx];
+    idx++;
+    node* newnode=new node(curr);
+     if(st==end){
+        return newnode;
+    }
+    int pos=search(in,st,end,curr);
+    newnode->left=buildtree(pre,in,st,pos-1);
+    newnode->right=buildtree(pre,in,pos+1,end);
+    return newnode;
+}
+
+void inorderprint(node* root){
+    if(root==NULL){
+        return;
+    }
+    inorderprint(root->left);
+    cout<<root->data<<" ";
+    inorderprint(root->right);
+    
+}
+int main() {
+    int pre[]={1,2,4,3,5};
+    int in[]={4,2,1,5,3};
+    node* root=buildtree(pre,in,0,4);
+    inorderprint(root);
+    return 0;
+}
