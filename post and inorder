@@ -1,53 +1,56 @@
-# TREES
-
 #include <iostream>
 using namespace std;
-struct node{
+
+struct node {
     int data;
-    struct node*left;
-    struct node*right;
-    node(int x){
-        data=x;
-        left=NULL;
-        right=NULL;
+    struct node* left;
+    struct node* right;
+    node(int x) {
+        data = x;
+        left = NULL;
+        right = NULL;
     }
 };
-int search(int inorder[],int start,int end,int x){
-    for(int i=start;i<=end;i++){
-        if(inorder[i]==x){
+
+int search(int inorder[], int start, int end, int x) {
+    for (int i = start; i <= end; i++) {
+        if (inorder[i] == x) {
             return i;
         }
     }
     return -1;
 }
-node* buildtree(int post[],int inorder[],int start,int end){
-    static int idx=4;
-    if(start>end){
+
+node* buildtree(int post[], int inorder[], int start, int end, int& idx) {
+    if (start > end) {
         return NULL;
     }
-    int x=post(idx);
+    int x = post[idx];
     idx--;
-    node* curr=new node(x);
-    if(start==end){
+    node* curr = new node(x);
+    if (start == end) {
         return curr;
     }
-    int pos=search(inorder,start,end,x);
-    curr->right=buildtree(post,inorder,pos+1,end);
-    curr->left=buildtree(post,inorder,start,pos-1);
+    int pos = search(inorder, start, end, x);
+    curr->right = buildtree(post, inorder, pos + 1, end, idx);
+    curr->left = buildtree(post, inorder, start, pos - 1, idx);
     return curr;
 }
-int inorderprint(node* root){
-    if(root==NULL){
-        return -1;
+
+void inorderprint(node* root) {
+    if (root == NULL) {
+        return;
     }
     inorderprint(root->left);
-    cout<<root->data<<" ";
+    cout << root->data << " ";
     inorderprint(root->right);
 }
+
 int main() {
-    int inorder[]={4,2,1,5,3};
-    int post[]={4,2,5,3,1};
-    node *root=buildtree(post,inorder,0,4);
+    int inorder[] = {4, 2, 1, 5, 3};
+    int postorder[] = {4, 2, 5, 3, 1};
+    int idx = 4;  // Initialize idx to the last index of postorder array
+    node* root = buildtree(postorder, inorder, 0, 4, idx);
     inorderprint(root);
     return 0;
 }
