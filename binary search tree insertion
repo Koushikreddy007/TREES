@@ -1,0 +1,44 @@
+// Online C++ compiler to run C++ program online
+#include <iostream>
+using namespace std;
+struct node{
+    int data;
+    node *left,*right;
+    node(int x){
+        data=x;
+        left=NULL;
+        right=NULL;
+        
+    }
+};
+node *insert(node *root, int x) {
+    if (root == NULL) {
+        return new node(x);
+    }
+    if (x < root->data) {
+        root->left = insert(root->left, x);
+    } else {
+        root->right = insert(root->right, x);
+    }
+    return root; // Return the updated root
+}
+void inorder(node *root){
+    if(root==NULL){
+        return;
+    }
+    inorder(root->left);
+    cout<<root->data<<" ";
+    inorder(root->right);
+}
+int main() {
+   node *root=NULL;
+ root=insert(root,6);
+   insert(root,4);
+   insert(root,2);
+   insert(root,3);
+   insert(root,1);
+   insert(root,5);
+   insert(root,7);
+   inorder(root);
+    return 0;
+}
